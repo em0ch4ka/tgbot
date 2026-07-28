@@ -1,13 +1,19 @@
-from aiogram import Bot, Dispatcher, types
-from aiogram.filters import CommandStart
-from aiogram.filters import Command
+from aiogram import Bot, Dispatcher, types, F
+from aiogram.filters import CommandStart, Command
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import asyncio
-from aiogram import F
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+if not BOT_TOKEN:
+  exit("Ошибка: Токен не найден в файле .env!")
 
 
-bot = Bot(token= "8710899201:AAHpAXatOYJj9lrojiGGw5h7aeEkQhOC9Tw")
 
+bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 help_keyboard = ReplyKeyboardMarkup(
@@ -24,7 +30,7 @@ main_keyboard =  ReplyKeyboardMarkup(
         [KeyboardButton(text="понедельник"), KeyboardButton(text="вторник")],
         [KeyboardButton(text= "среда"), KeyboardButton(text="четверг")],
         [KeyboardButton(text="пятница"), KeyboardButton(text="суббота")],
-        [KeyboardButton(text="воскрес")],
+        [KeyboardButton(text="воскресенье")],
 
     ],
 
