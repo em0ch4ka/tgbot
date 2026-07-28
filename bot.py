@@ -4,6 +4,7 @@ from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 import asyncio
 import os
 from dotenv import load_dotenv
+from aiohttp import web
 
 load_dotenv()
 
@@ -137,10 +138,23 @@ async def just_text(msg: types.Message):
     text = msg.text.lower()
     await msg.answer("Я тебя не понял, бро. Напиши /start! 🤖")
 
+
+async def handle(request):
+    return web.Response(text="Bot is alive!")
+
+async def start_website():
+    app = web.Application()
+    app.router.add_get("/", handle)
+    runner = web.AppRunner(app)
+    await runner.setup()
+    port = int(os.environ.get("PORT", 8080))
+    site = web.TCPSite(runner, "0.0.0.0", port)
+    await site.start()
+
 async def main():
 
     print("Бот стартует проврека сообщение")
-
+    await start_website()
     await dp.start_polling(bot)
 
 
