@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher, types, F
 from aiogram.filters import CommandStart, Command
-from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
+from aiogram.types import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardButton, InlineKeyboardMarkup
 import asyncio
 import os
 from dotenv import load_dotenv
@@ -17,12 +17,11 @@ if not BOT_TOKEN:
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
-help_keyboard = ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="расскажи о себе")], [KeyboardButton(text="кто тебя создал")]
-        
-    ],
-    resize_keyboard=True
+inline_help_kb = InlineKeyboardMarkup(
+    inline_keyboard=[
+        [InlineKeyboardButton(text="Расскажи о себе", callback_data="about_info")],
+        [InlineKeyboardButton(text="Кто твой создатель", callback_data="creator_info")]
+    ]
 )
 
 
@@ -48,21 +47,22 @@ async def cmd_message(message: types.Message):
 @dp.message(Command("help"))
 
 async def cmd_help(message: types.Message):
-    await message.answer("Чем могу быть полезен?", reply_markup=help_keyboard)
+    await message.answer("Чем могу быть полезен?", reply_markup=inline_help_kb  )
     
 
 
-info_buttons = ["кто тебя создал","расскажи о себе"]
+info_buttons = {
+    "about_info": "Я простой бот для расписания",
+    "creator_info": "Мой создатель em9"
+}
 
 
-@dp.message(F.text.lower().in_(info_buttons))
-async def info_bots(msg: types.Message):
-    text = msg.text.lower()
-    if text == "расскажи о себе":
-        await msg.answer("Я простой бот для расписание")
-    elif text == "кто тебя создал":
-        await msg.answer("мой создатель em9")
+@dp.callback_query(F.data.in_(info_buttons.keys()))
+async def handl_info_callback(callback: types.CallbackQuery):
+    await callback.answer()
 
+    response_text = info_buttons[callback.data]
+    await callback.message.edit_text(response_text)
 
 
 SCHEDULE = {"понедельник": """📅 ПОНЕДЕЛЬНИК
