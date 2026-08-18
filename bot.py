@@ -17,6 +17,15 @@ if not BOT_TOKEN:
 bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
+
+
+inline_teacher_kb = InlineKeyboardMarkup(
+    inline_keyboard = [
+        [InlineKeyboardButton(text="Тау А.Ф.", callback_data="prof_tau")],
+        [InlineKeyboardButton(text="Кисина М.К.", callback_data="prof_kisina")]
+    ]
+)
+
 inline_help_kb = InlineKeyboardMarkup(
     inline_keyboard=[
         [InlineKeyboardButton(text="Расскажи о себе", callback_data="about_info")],
@@ -47,9 +56,27 @@ async def cmd_message(message: types.Message):
 @dp.message(Command("help"))
 
 async def cmd_help(message: types.Message):
-    await message.answer("Чем могу быть полезен?", reply_markup=inline_help_kb  )
+    await message.answer("Чем могу быть полезен?", reply_markup=inline_help_kb)
+
+
+TEACHERS_INFO = {
+    "prof_tau": "👨‍🏫 Тау А.Ф.\n📚 Объектно-ориентированное программирование\n📍 Главный корпус, 404",
+    "prof_kisina": "👩‍🏫 Кисина М.К.\n📚 Web-программирование\n📍 Главный корпус, 300з",
+}
     
 
+@dp.message(Command("teachers"))
+
+async def cmd_teachers(message: types.Message):
+    await message.answer("Выбери преподавателя:", reply_markup=inline_teacher_kb)
+
+
+@dp.callback_query(F.data.in_(TEACHERS_INFO.keys()))
+
+async def teacher_answer(callback: types.CallbackQuery):
+    await callback.answer()
+
+    await callback.message.edit_text(TEACHERS_INFO[callback.data])
 
 info_buttons = {
     "about_info": "Я простой бот для расписания",
@@ -136,7 +163,7 @@ async def daily_rasp(msg: types.Message):
 
 async def just_text(msg: types.Message):
     text = msg.text.lower()
-    await msg.answer("Я тебя не понял, бро. Напиши /start! 🤖")
+    await msg.answer("Я тебя не понял, бро. Напиши /start!, /help, /teachers 🤖")
 
 
 async def handle(request):
