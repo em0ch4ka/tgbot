@@ -21,8 +21,26 @@ dp = Dispatcher()
 
 inline_teacher_kb = InlineKeyboardMarkup(
     inline_keyboard = [
-        [InlineKeyboardButton(text="Тау А.Ф.", callback_data="prof_tau")],
-        [InlineKeyboardButton(text="Кисина М.К.", callback_data="prof_kisina")]
+        [
+            InlineKeyboardButton(text="Тау А.Ф.", callback_data="prof_tau"),
+            InlineKeyboardButton(text="Кисина М.К.", callback_data="prof_kisina"),
+        ],
+        [
+            InlineKeyboardButton(text="Ашенбренер Ю.В.", callback_data="prof_ashenbrener"),
+            InlineKeyboardButton(text="Смагулова А.С.", callback_data="prof_smagulova"),
+        ],
+        [
+            InlineKeyboardButton(text="Мусаева Ж.Т.", callback_data="prof_musaeva"),
+            InlineKeyboardButton(text="Макашев Б.К.", callback_data="prof_makashev"),
+        ],
+        [
+            InlineKeyboardButton(text="Нұртай М.Д.", callback_data="prof_nurtay"),
+            InlineKeyboardButton(text="Омаров Ш.Ә.", callback_data="prof_omarov"),
+        ],
+        [
+            InlineKeyboardButton(text="Рахатов Т.Д.", callback_data="prof_rakhatov"),
+        ]
+    
     ]
 )
 
@@ -60,8 +78,41 @@ async def cmd_help(message: types.Message):
 
 
 TEACHERS_INFO = {
-    "prof_tau": "👨‍🏫 Тау А.Ф.\n📚 Объектно-ориентированное программирование\n📍 Главный корпус, 404",
-    "prof_kisina": "👩‍🏫 Кисина М.К.\n📚 Web-программирование\n📍 Главный корпус, 300з",
+    "prof_tau": """👨‍🏫 Тау А.Ф.
+📚 Объектно-ориентированное программирование (Лекция)
+📍 Главный корпус, 404""",
+
+    "prof_kisina": """👩‍🏫 Кисина М.К.
+📚 Web-программирование (Лаб)
+📍 Главный корпус, 300з""",
+
+    "prof_ashenbrener": """👨‍🏫 Ашенбренер Ю.В.
+📚 Структуры данных и алгоритмы их обработки (Лаб)
+📍 Главный корпус, 300е""",
+
+    "prof_smagulova": """👩‍🏫 Смагулова А.С.
+📚 Структуры данных и алгоритмы их обработки (Лекция)
+📍 Главный корпус, 405""",
+
+    "prof_musaeva": """👩‍🏫 Мусаева Ж.Т.
+📚 Основы права, Основы антикоррупционной культуры (Лекция)
+📍 Главный корпус, 352""",
+
+    "prof_makashev": """👨‍🏫 Макашев Б.К.
+📚 Охрана труда (Лекция)
+📍 Корпус №2, 311""",
+
+    "prof_nurtay": """👨‍🏫 Нұртай М.Д.
+📚 Объектно-ориентированное программирование (Лаб)
+📍 Главный корпус, 300е""",
+
+    "prof_omarov": """👨‍🏫 Омаров Ш.Ә.
+📚 Верификация, стандартизация и сертификация ПО (Лаб)
+📍 Главный корпус, 300з""",
+
+    "prof_rakhatov": """👨‍🏫 Рахатов Т.Д.
+📚 Охрана труда (Лаб)
+📍 Корпус №2, 517""",
 }
     
 
