@@ -11,7 +11,7 @@ schedule_rout = Router()
 
 
 def week_day():
-    week_num = datetime.now().isocalendar().week()
+    week_num = datetime.now().isocalendar().week
     if week_num % 2 == 0:
         return "числитель"
     else:
@@ -35,4 +35,4 @@ async def daily_rasp(msg: types.Message):
     day = msg.text.lower()
     week_type = week_day()
     text = SCHEDULE[week_type][day]
-    await msg.answer(SCHEDULE[text])
+    await msg.answer(text)
