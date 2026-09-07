@@ -1,7 +1,7 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
 
-from keyboards import inline_teacher_kb
+from keyboards import get_teachers_keyboard
 from data import SCHEDULE, TEACHERS_INFO
 from datetime import datetime
 
@@ -19,15 +19,22 @@ def week_day():
 
 @schedule_rout.message(Command("teachers"))
 async def cmd_teachers(message: types.Message):
-    await message.answer("Выбери преподавателя:", reply_markup=inline_teacher_kb)
+    await message.answer("Выбери преподавателя:", reply_markup=get_teachers_keyboard())
 
 
 @schedule_rout.callback_query(F.data.in_(TEACHERS_INFO.keys()))
 async def teacher_answer(callback: types.CallbackQuery):
-
     await callback.answer()
 
-    await callback.message.edit_text(TEACHERS_INFO[callback.data])
+    teacher = TEACHERS_INFO[callback.data]
+
+    await callback.message.answer_photo(
+        photo=teacher["photo"],
+        caption=teacher["bio"]
+    )
+
+
+    
 
 
 @schedule_rout.message(F.text.lower().in_(SCHEDULE["числитель"].keys()))
@@ -36,3 +43,4 @@ async def daily_rasp(msg: types.Message):
     week_type = week_day()
     text = SCHEDULE[week_type][day]
     await msg.answer(text)
+
