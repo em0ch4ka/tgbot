@@ -1,7 +1,6 @@
 from aiogram import Router, F, types
 from aiogram.filters import Command
-
-from keyboards import get_teachers_keyboard
+from keyboards.inline import get_teachers_keyboard
 from data import SCHEDULE, TEACHERS_INFO
 from datetime import datetime
 

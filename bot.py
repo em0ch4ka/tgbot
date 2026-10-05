@@ -5,6 +5,9 @@ from dotenv import load_dotenv
 from aiohttp import web
 from handlers.schedule import schedule_rout
 from handlers.common import common_router
+from database.db import create_db_pool
+from database.models import create_table_schedule, create_table_teachers
+
 
 load_dotenv()
 
@@ -34,6 +37,15 @@ async def start_website():
     await site.start()
 
 async def main():
+
+    pool = await create_db_pool()
+    print("Пул соединений с БД успешно создан!")
+
+    await create_table_schedule(pool)
+    await create_table_teachers(pool)
+    print("Таблицы teachers и schedule проверены/созданы!")
+
+    dp.workflow_data["db_pool"] = pool
 
     print("Бот стартует проврека сообщение")
     await start_website()

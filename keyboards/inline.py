@@ -1,24 +1,6 @@
-from aiogram.types import (
-    ReplyKeyboardMarkup,
-    KeyboardButton,
-    InlineKeyboardMarkup,
-    InlineKeyboardButton,
-    
-)
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from aiogram.utils.keyboard import InlineKeyboardBuilder
-
-main_keyboard =  ReplyKeyboardMarkup(
-    keyboard=[
-        [KeyboardButton(text="понедельник"), KeyboardButton(text="вторник")],
-        [KeyboardButton(text= "среда"), KeyboardButton(text="четверг")],
-        [KeyboardButton(text="пятница"), KeyboardButton(text="суббота")],
-        [KeyboardButton(text="воскресенье")],
-
-    ],
-
-    resize_keyboard=True
-)
 
 inline_help_kb = InlineKeyboardMarkup(
     inline_keyboard=[
@@ -32,12 +14,12 @@ def get_teachers_keyboard():
     builder = InlineKeyboardBuilder()
 
     builder.add(InlineKeyboardButton(text="Абилдаева Г.Б.", callback_data="prof_abildaeva"))
-    builder.add(InlineKeyboardButton(text="Ашенбренер Ю.В.", callback_data="prof_ashenbrener"))
+    builder.add(InlineKeyboardButton(text="Жәнібек М.А.", callback_data="prof_ashenbrener"))
     builder.add(InlineKeyboardButton(text="Кисина М.К.", callback_data="prof_kisina"))
     builder.add(InlineKeyboardButton(text="Макашев Б.К.", callback_data="prof_makashev"))
     builder.add(InlineKeyboardButton(text="Мусаева Ж.Т.", callback_data="prof_musaeva"))
     builder.add(InlineKeyboardButton(text="Нұртай М.Д.", callback_data="prof_nurtay"))
-    builder.add(InlineKeyboardButton(text="Омаров Ш.Ә.", callback_data="prof_omarov"))
+    builder.add(InlineKeyboardButton(text="Сүлеймен А. Е", callback_data="prof_omarov"))
     builder.add(InlineKeyboardButton(text="Рахатов Т.Д.", callback_data="prof_rakhatov"))
     builder.add(InlineKeyboardButton(text="Сайманова З.Б.", callback_data="prof_saimanova"))
     builder.add(InlineKeyboardButton(text="Смагулова А.С.", callback_data="prof_smagulova"))

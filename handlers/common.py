@@ -1,6 +1,7 @@
 from aiogram import Router, types, F
 from aiogram.filters import CommandStart, Command
-from keyboards import main_keyboard, inline_help_kb
+from keyboards.inline import inline_help_kb, get_teachers_keyboard
+from keyboards.reply import main_keyboard
 from data import info_buttons
 
 
