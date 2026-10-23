@@ -3,10 +3,10 @@ import asyncio
 import os
 from dotenv import load_dotenv
 from aiohttp import web
-from handlers.schedule import schedule_rout
+from handlers.schedule import schedule_rout, set_schedule_pool
 from handlers.common import common_router
-from database.db import create_db_pool
-from database.models import create_table_schedule, create_table_teachers
+from database.db import create_db_pool, init_db
+
 
 
 load_dotenv()
@@ -21,8 +21,7 @@ bot = Bot(token=BOT_TOKEN)
 dp = Dispatcher()
 
 
-dp.include_router(schedule_rout)
-dp.include_router(common_router)
+
 
 async def handle(request):
     return web.Response(text="Bot is alive!")
@@ -37,20 +36,22 @@ async def start_website():
     await site.start()
 
 async def main():
+    db_pool = await create_db_pool()
+    print("Успешное подключение к базе данных!")
 
-    pool = await create_db_pool()
-    print("Пул соединений с БД успешно создан!")
+    set_schedule_pool(db_pool)
 
-    await create_table_schedule(pool)
-    await create_table_teachers(pool)
-    print("Таблицы teachers и schedule проверены/созданы!")
+    await init_db(db_pool)
 
-    dp.workflow_data["db_pool"] = pool
+    dp.include_router(schedule_rout)
+    dp.include_router(common_router)
+    print("Таблицы успешно проверены/созданы!")
 
-    print("Бот стартует проврека сообщение")
     await start_website()
+    print("Веб-сервер для хостинга запущен!")
 
     await bot.delete_webhook(drop_pending_updates=True)
+    print("Бот успешно стартовал!")
     await dp.start_polling(bot)
 
 
