@@ -1,8 +1,7 @@
 import os
 import asyncpg
 from dotenv import load_dotenv
-from data import TEACHERS_INFO, SCHEDULE
-from database.models import add_schedule, add_teachers
+
 
 load_dotenv()
 
@@ -16,33 +15,29 @@ async def create_db_pool():
     )
 
 
-async def populate_db(pool):
-    for t_key, info in TEACHERS_INFO.items():
-        await add_teachers(
-            pool,
-            teacher_key=t_key,
-            bio=info.get("bio", ""),
-            photo=info.get("photo", "")
-        )
-    print("Преподаватели успешно загружены в базу!")
-
-    for week_type, days_dict in SCHEDULE.items():
-        for day_of_week, schedule_text in days_dict.items():
-                await add_schedule(
-                     pool,
-                     week_type=week_type,
-                     day_of_week=day_of_week,
-                     text=schedule_text
-                    
-                )
-    print("Расписание успешно загружено в базу!")
-
-
-
-
 async def init_db(pool):
-    from database.models import create_table_schedule, create_table_teachers
-    await create_table_teachers(pool)
-    await create_table_schedule(pool)
+    async with pool.acquire() as conn:
 
-    await populate_db(pool)
+        await conn.execute("""
+            CREATE TABLE IF NOT EXISTS users (
+                telegram_id BIGINT PRIMARY KEY,
+                full_name VARCHAR(255) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        """)
+
+        await conn.execute("""
+        CREATE TABLE IF NOT EXISTS schedule (
+                id SERIAL PRIMARY KEY,
+                day_of_week VARCHAR(20) NOT NULL,
+                lesson_number INT NOT NULL,
+                subject VARCHAR(255) NOT NULL,
+                lesson_type VARCHAR(50) NOT NULL,
+                teacher VARCHAR(255),
+                room VARCHAR(50),
+                week_type VARCHAR(20) DEFAULT 'all'
+            );
+        """)
+
+    
+    

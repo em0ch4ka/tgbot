@@ -4,7 +4,6 @@ import os
 from dotenv import load_dotenv
 from aiohttp import web
 from handlers.schedule import schedule_rout, set_schedule_pool
-from handlers.common import common_router
 from database.db import create_db_pool, init_db
 
 
@@ -44,7 +43,6 @@ async def main():
     await init_db(db_pool)
 
     dp.include_router(schedule_rout)
-    dp.include_router(common_router)
     print("Таблицы успешно проверены/созданы!")
 
     await start_website()

@@ -1,8 +1,8 @@
 from aiogram import Router, F, types
-from aiogram.filters import Command
-from keyboards.inline import get_teachers_keyboard
+from aiogram.filters import CommandStart
 from datetime import datetime
-from database.models import get_schedule_by_day, get_teachers
+from database.models import get_schedule_by_day
+from keyboards.reply import main_keyboard
 
 
 schedule_rout = Router()
@@ -23,22 +23,12 @@ def week_day():
         return "знаменатель"
 
 
-@schedule_rout.callback_query(F.data.startswith("prof_"))
-async def teacher_answer(callback: types.CallbackQuery):
-    teacher_key = callback.data.replace("prof_", "", 1)
 
-    teacher = await get_teachers(db_pool, teacher_key)
+@schedule_rout.message(CommandStart())
 
-    if not teacher:
-        await callback.answer("Преподаватель не найден!")
-        return
+async def cmd_message(message: types.Message):
 
-    await callback.answer()
-    await callback.message.answer_photo(
-        photo=teacher["photo"],
-        caption=teacher["bio"]
-    )
-
+    await message.answer("Сап братанчик я бот расписание Выбери день на кнопках ниже 👇", reply_markup=main_keyboard)
 
 @schedule_rout.message(F.text.lower().in_(["понедельник", "вторник", "среда", "четверг", "пятница", "суббота", "воскресенье"]))
 async def daily_rasp(msg: types.Message):
@@ -46,12 +36,28 @@ async def daily_rasp(msg: types.Message):
     day_display = msg.text.lower().capitalize()
     week_type = week_day()
 
-    row = await get_schedule_by_day(db_pool, day_query, week_type)
+    lessons = await get_schedule_by_day(db_pool, day_query, week_type)
 
-    if not row or not row["text"]:
-        await msg.answer(f"На {day_display} ({week_type}) пар не найдено или выходной!")
+    if not lessons:
+        await msg.answer(f"На {day_display} ({week_type}) пар не найдено или выходной!")    
         return
 
-    await msg.answer(row["text"])
-    
+    text = f"📅 <b>Расписание на {day_display} ({week_type}):</b>\n\n"
+
+    for lesson in lessons:
+        text += (
+            f"🔹 <b>{lesson['lesson_number']} пара:</b> {lesson['subject']}\n"
+            f"   📌 <i>Тип:</i> {lesson['lesson_type']}\n"
+            f"   👨‍🏫 <i>Преподаватель:</i> {lesson['teacher']}\n"
+            f"   📍 <i>Аудитория:</i> {lesson['room']}\n\n"
+        )
+
+    await msg.answer(text, parse_mode="HTML")
+
+
+@schedule_rout.message()
+
+async def txt_msg(msg: types.Message):
+    await msg.answer("Привет я бот расписание напиши /start")
+
 
