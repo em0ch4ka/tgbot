@@ -6,13 +6,11 @@ from aiohttp import web
 from handlers.schedule import schedule_rout, set_schedule_pool
 from database.db import create_db_pool, init_db
 
-
-
 load_dotenv()
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
-  exit("Ошибка: Токен не найден в файле .env!")
+  exit("Токен не найден")
 
 
 
