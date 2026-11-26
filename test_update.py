@@ -5,7 +5,7 @@ from sqlalchemy import update
 
 async def update_subject():
     async with async_session_maker() as session:
-        query = update(Schedulebase).where(Schedulebase.week_type == "Понедельник").values(week_type="Знаменатель")
+        query = update(Schedulebase).where(Schedulebase.day_of_week == "Числитель").values(day_of_week="числитель")
         await session.execute(query)
         await session.commit()
 

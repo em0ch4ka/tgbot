@@ -9,6 +9,8 @@ class Teacherbase(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     full_name: Mapped[str] = mapped_column(String(100))
     email: Mapped[str| None] = mapped_column(String(100))
+    phone: Mapped[int | None] = mapped_column(String(12))
+    about_info: Mapped[str] = mapped_column(String(120))
 
 
 class Subjectbase(Base):
